@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
+	"github.com/gormsvalidationapi/api"
+	db "github.com/gormsvalidationapi/db/sqlc"
+	"github.com/gormsvalidationapi/util"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/pc/gormsvalidationapi/api"
-	db "github.com/pc/gormsvalidationapi/db"
-	"github.com/pc/gormsvalidationapi/util"
 )
 
 func main() {

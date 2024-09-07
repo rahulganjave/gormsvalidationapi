@@ -1,4 +1,4 @@
-module github.com/pc/gormsvalidationapi
+module github.com/gormsvalidationapi
 
 go 1.21.4
 

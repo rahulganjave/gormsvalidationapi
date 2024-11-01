@@ -5,13 +5,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/gormsvalidationapi/db/sqlc"
-	"github.com/jackc/pgx/pgtype"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type createAccountRequest struct {
-	ClientID             pgtype.Text    `json:"client_id" binding:"required"`
-	Account              string         `json:"account" binding:"required"`
-	Trader               pgtype.Text    `json:"trader" binding:"required"`
+	ClientID             string         `json:"client_id" binding:"required"`
+	TradingAcct          string         `json:"trading_acct" binding:"required"`
+	TraderID             string         `json:"trader_id" binding:"required"`
 	CashBalanceBf        pgtype.Numeric `json:"cash_balance_bf" binding:"required"`
 	CashBalance          pgtype.Numeric `json:"cash_balance" binding:"required"`
 	EstTransCost         pgtype.Numeric `json:"est_trans_cost"`
@@ -27,22 +27,22 @@ type createAccountRequest struct {
 	CollateralHaircut    pgtype.Numeric `json:"collateral_haircut"`
 	EquityPositionValue  pgtype.Numeric `json:"equity_position_value"`
 	MarginRequirement    pgtype.Numeric `json:"margin_requirement"`
-	Currency             pgtype.Text    `json:"currency" binding:"required,oneof=USD EUR CAD"`
+	Currency             string         `json:"currency" binding:"required,oneof=USD EUR CAD"`
 	BuyLimit             pgtype.Numeric `json:"buy_limit" binding:"required"`
 	SellLimit            pgtype.Numeric `json:"sell_limit" binding:"required"`
 	BuyExposure          pgtype.Numeric `json:"buy_exposure"`
 	SellExposure         pgtype.Numeric `json:"sell_exposure"`
 	LoanLimit            pgtype.Numeric `json:"loan_limit"`
 	MarginFactor         pgtype.Numeric `json:"margin_factor"`
-	AuthorizedOrderType  pgtype.Int8    `json:"authorized_order_type"`
-	CalcMode             pgtype.Text    `json:"calc_mode"`
-	LimitMode            pgtype.Int4    `json:"limit_mode"`
-	Action               pgtype.Text    `json:"action"`
-	NettingMode          string         `json:"netting_mode"`
+	AuthorizedOrderType  uint64         `json:"authorized_order_type"`
+	CalcMode             uint64         `json:"calc_mode"`
+	LimitMode            uint64         `json:"limit_mode"`
+	ActionMode           uint64         `json:"action_mode"`
+	NettingMode          uint64         `json:"netting_mode"`
 	MaxOrdQty            pgtype.Numeric `json:"max_ord_qty"`
 	MaxOrdVal            pgtype.Numeric `json:"max_ord_val"`
-	NoOfTransaction      int32          `json:"no_of_transaction"`
-	TransactionInterval  int16          `json:"transaction_interval"`
+	NoOfTransaction      uint64         `json:"no_of_transaction"`
+	TransactionInterval  uint64         `json:"transaction_interval"`
 }
 
 func (server *Server) createAccount(ctx *gin.Context) {
@@ -53,9 +53,9 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	}
 
 	arg := db.CreateAccountParams{
-		ClientID:             req.ClientID,
-		Account:              req.Account,
-		Trader:               req.Trader,
+		ClientID:             pgtype.Text{String: req.ClientID, Valid: true},
+		TradingAcct:          req.TradingAcct,
+		TraderID:             pgtype.Text{String: req.TraderID, Valid: true},
 		CashBalanceBf:        req.CashBalanceBf,
 		CashBalance:          req.CashBalance,
 		EstTransCost:         req.EstTransCost,
@@ -71,22 +71,22 @@ func (server *Server) createAccount(ctx *gin.Context) {
 		CollateralHaircut:    req.CollateralHaircut,
 		EquityPositionValue:  req.EquityPositionValue,
 		MarginRequirement:    req.MarginRequirement,
-		Currency:             req.Currency,
+		Currency:             pgtype.Text{String: req.Currency},
 		BuyLimit:             req.BuyLimit,
 		SellLimit:            req.SellLimit,
 		BuyExposure:          req.BuyExposure,
 		SellExposure:         req.SellExposure,
 		LoanLimit:            req.LoanLimit,
 		MarginFactor:         req.MarginFactor,
-		AuthorizedOrderType:  req.AuthorizedOrderType,
-		CalcMode:             req.CalcMode,
-		LimitMode:            req.LimitMode,
-		Action:               req.Action,
-		NettingMode:          req.NettingMode,
+		AuthorizedOrderType:  int64(req.AuthorizedOrderType),
+		CalcMode:             int32(req.CalcMode),
+		LimitMode:            int32(req.LimitMode),
+		ActionMode:           int32(req.ActionMode),
+		NettingMode:          int32(req.NettingMode),
 		MaxOrdQty:            req.MaxOrdQty,
 		MaxOrdVal:            req.MaxOrdVal,
-		NoOfTransaction:      req.NoOfTransaction,
-		TransactionInterval:  req.TransactionInterval,
+		NoOfTransaction:      int32(req.NoOfTransaction),
+		TransactionInterval:  int16(req.TransactionInterval),
 	}
 
 	account, err := server.store.CreateAccount(ctx, arg)

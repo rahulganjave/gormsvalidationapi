@@ -2,12 +2,12 @@ package util
 
 // Constants for all supported positiontype
 const (
-	INTRADAY   = "1"
-	HISTORICAL = "2"
+	INTRADAY   = 1
+	HISTORICAL = 2
 )
 
 // IsSupportedpositiontype returns true if the positiontype is supported
-func IsSupportedPositiontype(positiontype string) bool {
+func IsSupportedPositiontype(positiontype int) bool {
 	switch positiontype {
 	case INTRADAY, HISTORICAL:
 		return true

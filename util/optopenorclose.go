@@ -2,12 +2,12 @@ package util
 
 // Constants for all supported posistionopenorclose
 const (
-	OPEN  = "0"
-	CLOSE = "1"
+	OPEN  = 'O'
+	CLOSE = 'C'
 )
 
 // IsSupportedpositionopenorclose returns true if the positionopenorclose is supported
-func IsSupportedpositionopenorclose(positionopenorclose string) bool {
+func IsSupportedpositionopenorclose(positionopenorclose rune) bool {
 	switch positionopenorclose {
 	case OPEN, CLOSE:
 		return true

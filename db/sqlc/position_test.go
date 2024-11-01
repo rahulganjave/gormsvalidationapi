@@ -18,20 +18,20 @@ func createRandomPosition(t *testing.T) Position {
 		RefPositionID:          pgtype.Text{},
 		TradingAcct:            pgtype.Text{String: util.RandomAccountNo(), Valid: true}.String,
 		ClientID:               pgtype.Text{String: "PSPL", Valid: true}.String,
-		Product:                pgtype.Text{String: util.RandomProduct(), Valid: true}.String,
-		Exchange:               pgtype.Text{String: util.RandomExchange(), Valid: true}.String,
-		Instrument:             pgtype.Text{String: util.RandomUnderlying(), Valid: true}.String,
-		Side:                   pgtype.Text{String: util.RandomSide(), Valid: true},
-		Status:                 pgtype.Text{String: util.RandomPositionStatus(), Valid: true},
-		PositionType:           pgtype.Text{String: util.RandomPositionType(), Valid: true},
-		SettlementStatus:       pgtype.Text{String: util.RandomSettlementStatus(), Valid: true},
-		CalcType:               pgtype.Text{},
+		ProductCode:            pgtype.Text{String: util.RandomProduct(), Valid: true}.String,
+		ExchangeCode:           pgtype.Text{String: util.RandomExchange(), Valid: true}.String,
+		InstrumentCode:         pgtype.Text{String: util.RandomUnderlying(), Valid: true}.String,
+		PositionSide:           int32(util.RandomSide()),
+		PositionStatus:         int32(util.RandomPositionStatus()),
+		PositionType:           int32(util.RandomPositionType()),
+		SettlementStatus:       int32(util.RandomSettlementStatus()),
+		CalcType:               int32(1),
 		OpenQty:                pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		OpenPx:                 pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		ClosedQty:              pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		ClosedPx:               pgtype.Numeric{Int: big.NewInt(0), Valid: true},
-		TradingCurr:            pgtype.Text{String: util.RandomCurrency(), Valid: true},
-		SettleCurr:             pgtype.Text{String: util.RandomCurrency(), Valid: true},
+		TradingCurr:            pgtype.Text{String: util.RandomCurrency(), Valid: true}.String,
+		SettleCurr:             pgtype.Text{String: util.RandomCurrency(), Valid: true}.String,
 		MarkPrice:              pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		MarkValue:              pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		ExchangeRate:           pgtype.Numeric{Int: big.NewInt(0), Valid: true},
@@ -45,18 +45,18 @@ func createRandomPosition(t *testing.T) Position {
 		CostToClose:            pgtype.Numeric{Int: big.NewInt(0), Valid: true},
 		TradeDate:              pgtype.Date{Time: util.RandomDate(2020, 2030), Valid: true},
 		TradingSessionID:       pgtype.Text{String: util.RandomExchange() + util.RandomProduct(), Valid: true},
-		Underlying:             pgtype.Text{String: util.RandomUnderlying(), Valid: true},
-		OpenClose:              pgtype.Text{String: util.RandomOpenOrClose(), Valid: true},
-		PutOrCall:              pgtype.Text{String: util.RandomPutOrCall(), Valid: true},
+		UnderlyingCode:         pgtype.Text{String: util.RandomUnderlying(), Valid: true},
+		OpenClose:              int32(util.RandomOpenOrClose()),
+		PutOrCall:              pgtype.Int4{Int32: int32(util.RandomPutOrCall()), Valid: true},
 		ContractSize:           pgtype.Numeric{Int: big.NewInt(util.RandomMoney()), Valid: true},
 	}
 	position, err := testQueries.CreatePosition(context.Background(), params)
 	require.NoError(t, err)
 	require.NotEmpty(t, position)
 
-	require.Equal(t, params.Instrument, position.Instrument)
-	require.Equal(t, params.Exchange, position.Exchange)
-	require.Equal(t, params.Product, position.Product)
+	require.Equal(t, params.InstrumentCode, position.InstrumentCode)
+	require.Equal(t, params.ExchangeCode, position.ExchangeCode)
+	require.Equal(t, params.ProductCode, position.ProductCode)
 
 	//require.NotZero(t, account.ID)
 	//require.NotZero(t, account.CreatedAt)
@@ -92,9 +92,9 @@ func TestUpdatePosition(t *testing.T) {
 	require.NotEmpty(t, position1)
 
 	require.Equal(t, position1.PositionID, position2.PositionID)
-	require.Equal(t, position1.Product, position2.Product)
-	require.Equal(t, position1.Exchange, position2.Exchange)
-	require.Equal(t, position1.Instrument, position2.Instrument)
+	require.Equal(t, position1.ProductCode, position2.ProductCode)
+	require.Equal(t, position1.ExchangeCode, position2.ExchangeCode)
+	require.Equal(t, position1.InstrumentCode, position2.InstrumentCode)
 	require.Equal(t, position1.TradingCurr, position2.TradingCurr)
 	require.WithinDuration(t, position1.CreatedAt, position2.CreatedAt, time.Second)
 }

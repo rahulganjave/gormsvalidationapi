@@ -97,59 +97,65 @@ func RandomUnderlying() string {
 }
 
 // RandomMarginType generates a random Margintype
-func RandomMarginType() string {
-	margintypes := []string{NonMarginProduct, PercentPerTradesValue, ValuePerLot, PercentPerTradeSize}
+func RandomMarginType() int {
+	margintypes := []int{NonMarginProduct, PercentPerTradesValue, ValuePerLot, PercentPerTradeSize}
 	n := len(margintypes)
 	return margintypes[rand.Intn(n)]
 }
 
 // RandomCommissionType generates a random CommissionType
-func RandomCommissionType() string {
-	commisiontypes := []string{C_PercentPerTradesValue, C_ValuePerLot, C_FixedValuePerTrades}
+func RandomCommissionType() int {
+	commisiontypes := []int{C_PercentPerTradesValue, C_ValuePerLot, C_FixedValuePerTrades}
 	n := len(commisiontypes)
 	return commisiontypes[rand.Intn(n)]
 }
 
 // RandomSide generates a random Side
-func RandomSide() string {
-	side := []string{BUY, SELL, SHORT_SELL}
+func RandomSide() int {
+	side := []int{BUY, SELL, SHORT_SELL}
 	n := len(side)
 	return side[rand.Intn(n)]
 }
 
 // RandomPositionType generates a random PositionType
-func RandomPositionType() string {
-	posistiontypes := []string{INTRADAY, HISTORICAL}
+func RandomPositionType() int {
+	posistiontypes := []int{INTRADAY, HISTORICAL}
 	n := len(posistiontypes)
 	return posistiontypes[rand.Intn(n)]
 }
 
 // RandomPositionStatus generates a random PositionStatus
-func RandomPositionStatus() string {
-	posistionstatus := []string{POS_OPEN, POS_CLOSED, POS_HALF_CLOSED}
+func RandomPositionStatus() int {
+	posistionstatus := []int{POS_OPEN, POS_CLOSED, POS_HALF_CLOSED}
 	n := len(posistionstatus)
 	return posistionstatus[rand.Intn(n)]
 }
 
 // RandomOpenOrClose generates a random open_or_close
-func RandomOpenOrClose() string {
-	open_or_close := []string{OPEN, CLOSE}
+func RandomOpenOrClose() rune {
+	open_or_close := []rune{OPEN, CLOSE}
 	n := len(open_or_close)
 	return open_or_close[rand.Intn(n)]
 }
 
 // RandomPutOrCall generates a random put_or_call
-func RandomPutOrCall() string {
-	put_or_call := []string{PUT, CALL}
+func RandomPutOrCall() int {
+	put_or_call := []int{PUT, CALL}
 	n := len(put_or_call)
 	return put_or_call[rand.Intn(n)]
 }
 
 // RandomSettlementStatus generates a random Settlementstatus
-func RandomSettlementStatus() string {
-	settlementstatus := []string{OUTSTANDING, SETTLED}
+func RandomSettlementStatus() int {
+	settlementstatus := []int{OUTSTANDING, SETTLED}
 	n := len(settlementstatus)
 	return settlementstatus[rand.Intn(n)]
+}
+
+func RandomAuthorizedOrderType() int {
+	authorizedordertype := []int{C_Buy, C_Sell, C_Limit, C_Market}
+	n := len(authorizedordertype)
+	return authorizedordertype[rand.Intn(n)]
 }
 
 // GenerateRandomID generates a random ID
@@ -167,4 +173,11 @@ func GenerateRandomID() string {
 
 func RandomPositionID() string {
 	return GenerateRandomID()
+}
+func RandomPrice(min, max float64) float64 {
+	// Seed the random number generator
+	rand.Seed(time.Now().UnixNano())
+
+	// Generate a random float64 between min and max
+	return min + rand.Float64()*(max-min)
 }

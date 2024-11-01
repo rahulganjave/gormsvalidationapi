@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	db "github.com/gormsvalidationapi/db/sqlc"
 	"github.com/gormsvalidationapi/util"
 )
@@ -30,18 +30,20 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	router.POST("/accounts", server.createAccount)
-	//router.POST("/orders", server.createOrder)
-	//router.GET("/positions", server.getPositions)
-	//router.POST("/instrumentfilters", server.createInstrumentfilter)
-
+	router.POST("/account", server.createAccount)
+	router.POST("/order", server.createOrder)
+	router.POST("/position", server.createPosition)
+	//router.GET("/position", server.getPosition)
+	router.POST("/instrumentfilter", server.createInstrumentFilter)
+	router.POST("/instrument", server.createInstrument)
+	router.POST("/currency", server.createCurrency)
 	server.router = router
 
 }
 
 // Start runs the HTTP server on a specific address.
 func (server *Server) Start(address string) error {
-	return server.route.Run(address)
+	return server.router.Run(address)
 }
 
 func errorResponse(err error) gin.H {
